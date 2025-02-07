@@ -1,0 +1,102 @@
+<link rel="stylesheet" href="./css/style.css">
+<?php
+require_once './templates/header.phtml'; ?>
+ <?php if($productos) : ?>
+<div class="container text-center">
+  <div class="row align-items-start">
+    <div class="col">
+      </div>
+    <div class="col">
+    </div>
+    <div class="col">
+    <h5>Total</h5>
+    </div>
+    <div class="col">
+    </div>
+    <div class="col">
+    </div>
+  </div>
+</div>
+
+<!-- Imprimir totales y contador de productos -->
+<?php 
+  $totalCosto=0;
+  $totalVenta=0; 
+  $cantProductos = 0;
+
+  foreach ($productos as $p) :?>
+    <div >    
+      <?php if($p->cantidadPorCompra) :
+              $totalCosto += ($p->cantidadPorCompra * $p->costo);
+              $totalVenta += ($p->cantidadPorCompra * $p->venta);
+              $cantProductos += $p->cantidadPorCompra;
+            else :
+              $totalCosto +=$p->costo;
+              $totalVenta += $p->venta;
+              $cantProductos += 1;
+            endif; ?>
+    </div> 
+<?php endforeach; 
+ $limpio= ($totalVenta - $totalCosto); 
+?>
+
+<div class="text-center">
+    <h2>$<?= $totalVenta;?></h2>    
+</div>
+<!-- imprimir todos los productos -->
+<div>
+      <div class="tabla-realizarcompra">
+      <table class="table table-striped">
+        <thead>
+            <th>Cantidad   </th>
+            <th>Nombre</th> 
+            <th></th>       
+            <th>Precio</th>
+            <th></th>
+            <th>Ingrese cantidad</th>    
+            <th></th>                            
+          <?php foreach ($productos as $p) :?>
+            <tbody>
+              <tr>
+                <td><?= $p->cantidadPorCompra; ?></td>  
+                <td><?= $p->nombre; ?></td>
+                <th></th> 
+                <th>$<?= $p->venta; ?></th>
+                <th></th> 
+                <td><form action="<?= BASE_URL ?>cantDeUnProducto/<?= $p->id ?>" method="POST"><input type="number" name="cantDeUnProducto" placeholder="Ingrese cantidad..."><button type="submit" class="btn text-white btn-success btn-sm ">Confirmar</button></form></td>
+                <td><a href="<?= BASE_URL ?>deseleccionarProducto/<?= $p->id ?>" class="btn text-white btn-danger btn-sm ">Eliminar</a></td>
+                <td><?php if($res && $_SESSION['ID_USER'] != 3) : ?><a class="btn btn-outline-primary" href="<?= BASE_URL ?>home">Agregar Producto</a><?php endif; ?></td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </thead>
+      </table>
+    </div>
+</div>
+
+<!-- Datos para enviar la compra -->
+<?php            
+  date_default_timezone_set("America/Argentina/Jujuy");
+  $fecha = date('Y-d-m H:i:s'); ?>
+
+<div class="fixed-bottom">
+    <form action="<?= BASE_URL ?>enviarCompra" method="POST">
+      <input type="hidden" name="cantProductos" value="<?= $cantProductos ?>">
+      <input type="hidden" name="totalCosto" value="<?= $totalCosto ?>">
+      <input type="hidden" name="totalVenta" value="<?= $totalVenta ?>">
+      <input type="hidden" name="limpio" value="<?= $limpio ?>">
+      <input type="hidden" name="fecha" value="<?= $fecha ?>">
+      <label>Met. Pago</label>
+      <select name="metPago" id="">
+        <option value="efectivo">Efectivo</option>
+        <option value="transferencia">Transferencia</option>
+      </select>
+      <div>
+      <a href="<?= BASE_URL ?>deshacerCompra" class="btn text-white btn-danger btn-sm mt-3">Cancelar Compra</a></td>
+      <button type="submit"class="btn text-white btn-success btn-sm mt-3">Enviar Compra</></td>
+      </div>
+    </form>
+</div>
+<?php endif; ?>
+
+

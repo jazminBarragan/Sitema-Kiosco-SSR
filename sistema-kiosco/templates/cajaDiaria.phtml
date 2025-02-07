@@ -1,0 +1,162 @@
+<?php
+require_once './templates/header.phtml';
+?>
+<div id="productos" class="container my-5 ">
+  <div class="row">
+    <div class="col-6">
+      <h3><?php if($_SESSION['ID_USER'] != 3) : ?>Total:</h3>
+      <h2><?= $totalVenta ?> </h2>
+      <?php endif; ?>
+    </div>
+
+    <div class="col-6 d-flex p-2 bd-highlight">
+      <?php if($_SESSION['ID_USER'] != 3) : ?> Buscador
+        <form action="<?= BASE_URL ?>buscador" method="POST">
+          <input type="text" name="infoDelProducto">
+          <button type="submit">Buscar</button>
+        </form>
+        <a href="<?= BASE_URL ?>home">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z"/>
+            <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466"/>
+          </svg>
+        </a>
+      <?php endif; ?>
+    </div>
+  </div>      
+        <div class= "text-center"><?php if($_SESSION['ID_USER'] == 3) : ?><h3>Stock</h3> <?php endif; ?>
+        </div>
+<?php if($stock) : ?>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+        <th><?php if($_SESSION['ID_USER'] == 3) : ?>Cantidad <?php endif; ?></th>
+          <th>Producto</th>
+          <th><?php if($_SESSION['ID_USER'] == 3) : ?>Costo <?php endif; ?></th>
+          <th>Venta</th>
+          <th><?php if($_SESSION['ID_USER'] == 3) : ?>Limpio <?php endif; ?></th>
+          <!--Si el usuario es el ADMINISTRADOR mostrar boton "AGREGAR PRODUCTO" -->
+          <th><?php if($_SESSION['ID_USER'] == 3) : ?><button class="btn text-white btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#agregarProductoStockModal">AGREGAR PRODUCTO NUEVO</button> <?php endif; ?></th>
+          </tr>
+      </thead>
+  <tbody>
+  <?php foreach ($stock as $producto) : ?>
+    <tr>
+    <th><?php if(empty($_SESSION['ID_USER']) || $_SESSION['ID_USER'] == 3) : ?> <?= $producto->cantidadEnStock; ?> <?php endif; ?></th>
+      <td><?= $producto->nombre ?></td>
+      <th><?php if(empty($_SESSION['ID_USER']) || $_SESSION['ID_USER'] == 3) : ?> <?= $producto->costo; ?> <?php endif; ?></th>
+      <td><?= $producto->venta ?></td>
+      <th><?php if($_SESSION['ID_USER'] == 3) : ?> <?= $producto->limpio; ?> <?php endif; ?></th>
+      <td><?php if($_SESSION['ID_USER'] != 3 && $producto->seleccion != 0) : ?>
+        seleccionado
+      <?php endif; ?> </td>
+
+      <div class="text-center">
+          <td>
+            <!--Si el usuario es un EMPLEADO mostrar boton "Agregar"-->
+            <?php if (!empty($_SESSION['ID_USER']) && $_SESSION['ID_USER'] != 3): ?>
+              <a href="<?= BASE_URL ?>seleccionarProducto/<?= $producto->id ?>"  <?php if($producto->seleccion != 0) : ?>
+                class="btn text-white btn-danger btn-sm" <?php endif; ?> class="btn text-white btn-success btn-sm" >Agregar</a>
+          </td>
+            <?php endif; ?>
+      </div>
+        <td>
+            <!--Si el usuario es un EMPLEADO mostrar boton "Eliminar"-->
+            <?php if (!empty($_SESSION['ID_USER']) && $_SESSION['ID_USER'] != 3): ?>
+          <a href="<?= BASE_URL ?>deseleccionarProductoHome/<?= $producto->id ?>"  <?php if($producto->seleccion != 0) : ?>
+            class="btn text-white btn-danger btn-sm" <?php endif; ?> class="btn text-white btn-danger btn-sm" >Eliminar</a></td>
+        </td>
+        <?php endif; ?>
+        <td>
+          <!--Si el usuario es el ADMINISTRADOR mostrar boton "Actualizar"-->
+          <?php if (!empty($_SESSION['ID_USER']) && $_SESSION['ID_USER'] == 3): ?>
+          <a class="btn text-white btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#editarProductoStockModal" id="btn-actualizar" data-nombre="<?= $producto->nombre ?>" data-cantidad="<?= $producto->cantidadEnStock ?>" data-costo="<?= $producto->costo ?>" data-venta="<?= $producto->venta ?>" data-id="<?= $producto->id ?>">Actualizar</a>
+        </td>
+        <?php endif; ?>
+    </tr>
+  </div>
+
+    <!-- Modal para editar un producto en stock-->
+<div class="modal fade" id="editarProductoStockModal" tabindex="-1" aria-labelledby="editTurnoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editTurnoModalLabel">Actualizar producto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formEditarProductoEnStock" action="<?= BASE_URL ?>editarProductoStock/<?= $producto->id ?>" method="POST" id="edit-form">
+        <div class="mb-3">
+            <label>Producto</label>
+            <input id="input-nombre" type="text" name="nombre" class="form-control" id="editFechaTurno">
+          </div>
+        <div class="mb-3">
+            <label>Cantidad</label>
+            <input id="input-cantidad" type="number" name="cantidad" class="form-control" id="editFechaTurno">
+          </div>
+          <div class="mb-3">
+            <label >Costo</label>
+            <input id="input-costo" type="number" name="costo" class="form-control" id="editEspecialidadTurno">
+          </div>
+          <div class="mb-3">
+            <label>Venta</label>
+            <input id="input-venta" type="number" name="venta" class="form-control" id="consultorioTurno">
+          </div>
+          <div class="mb-3">
+            <input id="input-limpio" type="hidden" name="limpio" class="form-control" id="consultorioTurno">
+          </div>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </form>
+       </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal para agregar un producto en stock-->
+<div class="modal fade" id="agregarProductoStockModal" tabindex="-1" aria-labelledby="editTurnoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editTurnoModalLabel">Agregar producto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="agregarProductoAlStock" method="POST" id="edit-form">
+        <div class="mb-3">
+            <label>Producto</label>
+            <input type="text" name="nombre" class="form-control" id="editFechaTurno">
+          </div>
+        <div class="mb-3">
+            <label>Cantidad</label>
+            <input type="number" name="cantidad" class="form-control" id="editFechaTurno">
+          </div>
+          <div class="mb-3">
+            <label >Costo</label>
+            <input type="number" name="costo" class="form-control" id="editEspecialidadTurno">
+          </div>
+          <div class="mb-3">
+            <label>Venta</label>
+            <input type="number" name="venta" class="form-control" id="consultorioTurno">
+          </div>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+   </div>
+</div>
+<?php endforeach; ?>
+</tbody>
+</table>
+</div>
+<?php endif; ?>
+<div class="fixed-bottom">
+  <?php if(!empty($_SESSION['ID_USER']) && $_SESSION['ID_USER'] != 3) : ?>
+  <a class="btn text-white btn-primary btn-sm" href="<?= BASE_URL ?>realizarCompra"><?php if($_SESSION['ID_USER'] != 3) : ?> Realizar compra <?php endif; ?> </a>
+    <?php endif; ?>
+</div>
+<script src="./js/modalEditar.js"></script>

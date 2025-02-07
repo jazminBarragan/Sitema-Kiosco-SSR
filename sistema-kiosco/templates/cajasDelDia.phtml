@@ -1,0 +1,28 @@
+<?php
+require_once './templates/header.phtml';
+?>
+
+<table class="table table-striped">
+    <thead>
+        <th>Empleado</th>
+        <th>Total costo</th>
+        <th>Total venta</th>
+        <th>Limpio</th>
+        <th>Cant.Productos</th>
+        <th>Inicio sesión</th>
+        <th>Egreso sesión</th>
+    
+        <?php foreach ($cajas as $caja) : ?>
+            <tr>
+                <td><?= $caja->empleado; ?></td>
+                <td><?= $caja->totalCosto; ?></td>
+                <td><?= $caja->totalVenta; ?></td>
+                <td><?= $caja->limpio; ?></td>
+                <td><?= $caja->cantProductos; ?></td>
+                <td><?= $caja->inicioSesion; ?></td>
+                <td><?= $caja->egresoSesion; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+      

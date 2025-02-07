@@ -1,0 +1,27 @@
+<?php
+require_once './templates/header.phtml';
+?>
+<?php if($ventas) : ?>
+<table class="table table-striped">
+    <thead>
+        <th>Cant.Prod</th>
+        <th>Nro. Cliente</th>
+        <th>Met. Pago</th>
+        <th>Costo</th>
+        <th>Venta</th>
+        <th>Limpio</th>
+        <th>Fecha</th>
+        <?php foreach ($ventas as $v) : ?>
+            <tr>
+                <td><?= $v->cantProductos; ?></td>
+                <td><?= $v->nroCliente; ?></td>
+                <td><?= $v->metodoDePago; ?></td>
+                <td><?= $v->totalCosto; ?></td>
+                <td><?= $v->totalVenta; ?></td>
+                <td><?= $v->limpio; ?></td>
+                <td><?= $v->fecha; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+      <?php endif; ?>

@@ -1,0 +1,10 @@
+div .fixed-bottom.container-fluid{
+    background-color: white;
+}
+.tabla-realizarcompra{
+    display: flex;
+}
+.titulo-stock-cajadiaria{
+    font-weight: 300;
+    color: blue;
+}
