@@ -1,0 +1,54 @@
+<?php
+if($error === 'No se encontraron resultados.') :
+    require_once './templates/cajaDiaria.phtml';  ?>
+    <div class="alert alert-dark" role="alert">
+        <?= $error; ?> 
+        <a class="btn btn-outline-primary" href="<?= BASE_URL ?>home">Volver</a>
+    </div>
+<?php endif; ?>
+<?php
+if($error === 'Ingrese un NÚMERO VÁLIDO.') : ?>
+    <div class="alert alert-dark" role="alert">
+    <?= $error; ?> 
+    <a class="btn btn-outline-primary" href="<?= BASE_URL ?>realizarCompra">Volver</a>
+  </div>
+<?php endif; ?>
+<?php
+if($error === 'No hay productos seleccionados.') : ?>
+    <div class="alert alert-dark" role="alert">
+    <?= $error; ?> 
+    <a class="btn btn-outline-primary" href="<?= BASE_URL ?>home">Volver</a>
+  </div>
+<?php endif; ?>
+<?php
+if($error === 'No puede enviar una compra sin datos.') : ?>
+    <div class="alert alert-dark" role="alert">
+    <?= $error; ?> 
+    <a class="btn btn-outline-primary" href="<?= BASE_URL ?>home">Volver</a>
+  </div>
+<?php endif; ?>
+<?php
+if($error === 'No hay cajas del día de hoy.') : ?>
+    <div class="alert alert-dark" role="alert">
+    <?= $error; ?> 
+    <a class="btn btn-outline-primary" href="<?= BASE_URL ?>home">Volver</a>
+  </div>
+<?php endif; ?>
+<?php
+if($error === 'No hay sesiones del día de hoy.') : ?>
+    <div class="alert alert-dark" role="alert">
+    <?= $error; ?> 
+    <a class="btn btn-outline-primary" href="<?= BASE_URL ?>home">Volver</a>
+  </div>
+<?php endif; ?><?php
+if($error === 'No hay ventas del día de hoy.') : ?>
+    <div class="alert alert-dark" role="alert">
+    <?= $error; ?> 
+    <a class="btn btn-outline-primary" href="<?= BASE_URL ?>home">Volver</a>
+  </div>
+<?php endif; ?>
+
+
+
+
+ 

@@ -1,0 +1,19 @@
+<?php
+require_once './templates/header.phtml';
+?>
+<table class="table table-striped">
+    <thead>
+        <th>Empleado</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+    
+        <?php foreach ($sesiones as $sesion) : ?>
+            <tr>
+                <td><?= $sesion->nombre; ?></td>
+                <td><?= $sesion->fecha; ?></td>
+                <td><?= $sesion->estado; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+      

@@ -1,0 +1,61 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$res = !empty($_SESSION['ID_USER']);
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema - Candy Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="<?= BASE_URL ?>home">Candy store</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Opciones de navegación a la izquierda -->
+                <ul class="navbar-nav me-auto"> 
+                    <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>ventasDelDia"><?php if($res && $_SESSION['ID_USER'] == 3) : ?> Ventas del día <?php endif; ?></a></li>    
+                    <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>cajaDiaria"><?php if($res && $_SESSION['ID_USER'] == 3) : ?> Cajas del día <?php endif; ?></a></li>    
+                    <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>registros"><?php if($res && $_SESSION['ID_USER'] == 3) : ?> Cajas del mes <?php endif; ?></a></li>    
+                    <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>registros"><?php if($res && $_SESSION['ID_USER'] == 3) : ?> Registro de meses <?php endif; ?></a></li>    
+                    <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>sesiones"><?php if($res && $_SESSION['ID_USER'] == 3) : ?> Registro Sesiones<?php endif; ?></a></li>    
+                    </ul>
+                <!-- Estado de sesión e Iniciar/Cerrar Sesión, alineado a la derecha -->
+                <ul class="navbar-nav ms-auto">
+                    <?php if (!empty($_SESSION['ID_USER'])): ?>
+                        <!-- Icono verde y botón de cerrar sesión -->
+                        <li class="nav-item d-flex align-items-center">
+                            <i class="fas fa-user-circle text-success me-2" style="font-size: 1.5rem;"></i>
+                            <span class="navbar-text text-success me-3">Estás logueado</span>
+                            <a class="btn btn-outline-danger" href="<?= BASE_URL ?>deslogueo">Cerrar Sesión</a>
+                        </li>
+                    <?php else: ?>
+                        <!-- Icono rojo y opción de iniciar sesión -->
+                        <li class="nav-item d-flex align-items-center">
+                            <i class="fas fa-user-circle text-danger me-2" style="font-size: 1.5rem;"></i>
+                            <span class="navbar-text text-danger me-3">No has iniciado sesión</span>
+                            <a class="btn btn-outline-success" href="<?= BASE_URL ?>mostrarLogueo">Iniciar Sesión</a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Resto del contenido de tu página -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
